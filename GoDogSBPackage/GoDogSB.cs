@@ -64,20 +64,18 @@ namespace GoDogSBPackage
                 process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "\\ffmpeg\\ffmpeg.exe";
                 process.StartInfo.Arguments = filArgs;
                 process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.CreateNoWindow = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
-
-                process.EnableRaisingEvents = true;
-                process.OutputDataReceived += (s, e) => this.Log(e.Data);
-                process.ErrorDataReceived += (s, e) => this.Log($@"Error: {e.Data}");
 
                 process.Start();
 
                 this.Log("Conversion process started.");
 
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
+                while (!process.StandardError.EndOfStream)
+                {
+                    this.Log(process.StandardError.ReadLine());
+                }
             }
             catch (Exception ex)
             {
