@@ -45,23 +45,22 @@ namespace MqttClientLib
         private async Task OnConnectedAsync(object s, MqttClientConnectedEventArgs e)
         {
             this.goDogSB.Log("### Connected to MQTT server ###");
-
             // Subscribe to a topic
             await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic(this.topic).Build());
-
-            this.goDogSB.Log("### Subscribed ###");
         }
 
         private void OnMessageReceived(object s, MqttApplicationMessageReceivedEventArgs e)
         {
-            this.goDogSB.Log($"MQTT Message received, {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-            if (Encoding.UTF8.GetString(e.ApplicationMessage.Payload).ToLower() == "start")
+            string message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload).ToLower();
+            this.goDogSB.Log($"MQTT Message received, {message}");
+
+            if (message == "start")
             {
                 this.goDogSB.StartConversion();
             }
-            else if (Encoding.UTF8.GetString(e.ApplicationMessage.Payload).ToLower() == "stop")
+            else if (message == "stop")
             {
-                this.goDogSB.StopConversion();
+                this.goDogSB.StopConversion(true);
             }
         }
 

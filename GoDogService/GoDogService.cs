@@ -51,13 +51,13 @@ namespace GoDogService
         {
             this.goDogEventLog.WriteEntry("System shutdown at " + DateTime.Now);
             this.goDogSB.Log("System shutdown at " + DateTime.Now);
-            this.goDogSB.StopConversion();
+            this.goDogSB.StopConversion(true);
         }
 
         protected override void OnStop()
         {
             this.mqttSubscriber.DisconnectClient();
-            this.goDogSB.StopConversion();
+            this.goDogSB.StopConversion(true);
 
             this.goDogEventLog.WriteEntry("Service stoppped at " + DateTime.Now);
             this.goDogSB.Log("Service stoppped at " + DateTime.Now);
