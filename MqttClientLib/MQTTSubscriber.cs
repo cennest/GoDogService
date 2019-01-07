@@ -52,7 +52,7 @@ namespace MqttClientLib
         private void OnMessageReceived(object s, MqttApplicationMessageReceivedEventArgs e)
         {
             string message = Encoding.UTF8.GetString(e.ApplicationMessage.Payload).ToLower();
-            this.goDogSB.Log($"MQTT Message received, {message}");
+            this.goDogSB.Log($"MQTT message received , {message}");
 
             if (message == "start")
             {
@@ -64,19 +64,9 @@ namespace MqttClientLib
             }
         }
 
-        private async void OnDisconnect(object s, MqttClientDisconnectedEventArgs e)
+        private void OnDisconnect(object s, MqttClientDisconnectedEventArgs e)
         {
             this.goDogSB.Log("### Disconnected From MQTT server ###");
-            await Task.Delay(TimeSpan.FromSeconds(5));
-
-            try
-            {
-                await mqttClient.ConnectAsync(options);
-            }
-            catch
-            {
-                this.goDogSB.Log("### Reconnection failed with MQTT server ###");
-            }
         }
     }
 }

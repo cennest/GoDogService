@@ -12,10 +12,15 @@ namespace GoDogSBPackage
         private Thread bgWorker;
         private Process process;
 
+        public string InputURL { get; set; }
+        public string OutputURL { get; set; }
+
         public bool IsForcedStopped { get; set; }
 
-        public GoDogSB()
+        public GoDogSB(string inputURL, string outputURL)
         {
+            this.InputURL = inputURL;
+            this.OutputURL = outputURL;
             logger = new GoDogLogger();
         }
 
@@ -23,9 +28,17 @@ namespace GoDogSBPackage
         {
             if (GoDog_SB == null)
             {
-                GoDog_SB = new GoDogSB();
+                GoDog_SB = new GoDogSB(string.Empty, string.Empty);
             }
+            return GoDog_SB;
+        }
 
+        public static GoDogSB GetGoDogSB(string inputURL, string outputURL)
+        {
+            if (GoDog_SB == null)
+            {
+                GoDog_SB = new GoDogSB(inputURL, outputURL);
+            }
             return GoDog_SB;
         }
 
@@ -60,49 +73,53 @@ namespace GoDogSBPackage
 
         private void StartVideoConversion()
         {
-            string inputFile = @"rtsp://admin:Foxhound1!@192.168.1.64/Streaming/Channels/1";
-            string outputFile = @"rtmp://104.248.182.51/live/2";
-            string filArgs = string.Format("-stimeout 5000 -rtsp_transport tcp -i \"{0}\" -c:v copy -c:a aac -b:a 128k -ar 44100 -f flv \"{1}\"", inputFile, outputFile);
-
-            process = new Process();
-
-            try
+            if (string.IsNullOrWhiteSpace(this.InputURL) && string.IsNullOrWhiteSpace(this.OutputURL))
             {
-                process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "\\ffmpeg\\ffmpeg.exe";
-                process.StartInfo.Arguments = filArgs;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = false;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-
-                process.Start();
-
-                this.Log("Conversion process started.");
-
-                while (!process.StandardError.EndOfStream)
+                try
                 {
-                    this.Log(process.StandardError.ReadLine());
+                    string filArgs = string.Format("-stimeout 5000 -rtsp_transport tcp -i \"{0}\" -c:v copy -c:a aac -b:a 128k -ar 44100 -f flv \"{1}\"", this.InputURL, this.OutputURL);
+
+                    process = new Process();
+                    process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "\\ffmpeg\\ffmpeg.exe";
+                    process.StartInfo.Arguments = filArgs;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = false;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.RedirectStandardError = true;
+
+                    process.Start();
+                    this.Log("Conversion process started.");
+
+                    while (!process.StandardError.EndOfStream)
+                    {
+                        this.Log(process.StandardError.ReadLine());
+                    }
                 }
-
-                this.Log($"Responding: {process.Responding.ToString()}");
-            }
-            catch (Exception ex)
-            {
-                this.Log($"Exception: {ex.ToString()}");
-            }
-            finally
-            {
-                process.WaitForExit();
-                process.Close();
-
-                if (!IsForcedStopped)
+                catch (Exception ex)
                 {
-                    this.Log("Restarting conversion process.");
-                    StopConversion();
-                    StartConversion();
+                    this.Log($"Exception: {ex.ToString()}");
                 }
+                finally
+                {
+                    if (process != null)
+                    {
+                        process.WaitForExit();
+                        process.Close();
 
-                this.Log("Conversion process exited.");
+                        if (!IsForcedStopped)
+                        {
+                            this.Log("Restarting conversion process.");
+                            StopConversion();
+                            StartConversion();
+                        }
+
+                        this.Log("Conversion process exited.");
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Input/Output streams not found. PLease provoide Input/Output streams.");
             }
         }
     }
