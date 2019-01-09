@@ -52,6 +52,8 @@ namespace GoDogSBPackage
                 IsForcedStopped = forcedStop;
                 if (process != null && !process.HasExited)
                 {
+                    process.CancelErrorRead();
+                    process.CancelOutputRead();
                     process.Kill();
                 }
             }
@@ -70,21 +72,21 @@ namespace GoDogSBPackage
         {
             if (!string.IsNullOrWhiteSpace(this.InputURL) && !string.IsNullOrWhiteSpace(this.OutputURL))
             {
+                string filArgs = string.Format("-stimeout 5000 -rtsp_transport tcp -re -i \"{0}\" -c:v copy -c:a aac -b:a 128k -ar 44100 -f flv \"{1}\"", this.InputURL, this.OutputURL);
                 try
                 {
-                    string filArgs = string.Format("-stimeout 5000 -rtsp_transport tcp -re -i \"{0}\" -c:v copy -c:a aac -b:a 128k -ar 44100 -f flv \"{1}\"", this.InputURL, this.OutputURL);
-
                     process = new Process();
 
                     process.StartInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + "\\ffmpeg\\ffmpeg.exe";
                     process.StartInfo.Arguments = filArgs;
 
-                    process.StartInfo.UseShellExecute = false;
                     process.StartInfo.CreateNoWindow = true;
-                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.UseShellExecute = false;
                     process.StartInfo.RedirectStandardError = true;
-                    process.EnableRaisingEvents = true;
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
+                    process.EnableRaisingEvents = true;
                     process.Exited += Process_Exited;
                     process.OutputDataReceived += Process_OutputDataReceived;
                     process.ErrorDataReceived += Process_ErrorDataReceived;
@@ -92,7 +94,6 @@ namespace GoDogSBPackage
                     process.Start();
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
-
 
                     this.Log("Conversion process started.");
                 }
@@ -119,6 +120,10 @@ namespace GoDogSBPackage
 
         private void Process_Exited(object sender, EventArgs e)
         {
+            process.CancelErrorRead();
+            process.CancelOutputRead();
+            process.Close();
+
             if (!IsForcedStopped)
             {
                 this.Log("Restarting conversion process.");
