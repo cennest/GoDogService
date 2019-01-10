@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace GoDogServer
 {
     public class Logger
     {
+        const int FILE_SIZE = 10;
         private static Logger _Logger;
 
         public Logger()
@@ -27,6 +29,11 @@ namespace GoDogServer
             }
         }
 
+        private long GetMaxFileSize()
+        {
+            return FILE_SIZE * 1024 *1024;
+        }
+
         /// <summary>
         /// A helper method to create singleton instance of Logger class
         /// </summary>
@@ -42,10 +49,18 @@ namespace GoDogServer
 
         public void Log(string message)
         {
-            string filepath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + "-"+ DateTime.Now.Hour + ".txt";
-            CreateLogFile(filepath);
+            string filename = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDogLog.txt";
 
-            using (StreamWriter sw = File.AppendText(filepath))
+            CreateLogFile(filename);
+
+            long length = new FileInfo(filename).Length;
+            if (length > GetMaxFileSize())
+            {
+                File.WriteAllLines(filename, File.ReadAllLines(filename)
+                    .Where((line, index) => index >= 2));
+            }
+
+            using (StreamWriter sw = File.AppendText(filename))
             {
                 sw.WriteLine(message);
             }
