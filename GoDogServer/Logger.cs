@@ -7,7 +7,7 @@ namespace GoDogServer
     public class Logger
     {
         const int FILE_SIZE = 10;
-        const int LINES_TO_SKIP = 100;
+        const int LINES_TO_SKIP = 1000;
 
         private static Logger _Logger;
 
@@ -33,7 +33,7 @@ namespace GoDogServer
 
         private long GetMaxFileSize()
         {
-            return FILE_SIZE * 1024 *1024;
+            return FILE_SIZE * 1024 * 1024;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace GoDogServer
 
         public void Log(string message)
         {
-            string filename = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDogLog.txt";
+            string filename = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + ".txt";
 
             CreateLogFile(filename);
 
