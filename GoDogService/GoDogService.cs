@@ -9,6 +9,8 @@ namespace GoDogService
 {
     public partial class GoDogService : ServiceBase
     {
+        protected Logger logger;
+
         public GoDogProcess goDogProcess;
         public ManagedSubscriber mqttSubscriber;
 
@@ -19,6 +21,7 @@ namespace GoDogService
         {
             InitializeComponent();
 
+            logger = new Logger().GetLogger();
             this.goDogProcess = GoDogProcess.GetGoDogProcess(inputFile, outputFile);
             this.goDogEventLog = new EventLog();
             this.mqttSubscriber = new ManagedSubscriber();
@@ -35,26 +38,26 @@ namespace GoDogService
         protected override void OnStart(string[] args)
         {
             this.goDogEventLog.WriteEntry("Service started at " + DateTime.Now);
-            Logger.Log("Service started at " + DateTime.Now);
+            logger.Log("Service started at " + DateTime.Now);
             this.goDogProcess.StartConversion();
         }
 
         protected override void OnPause()
         {
             this.goDogEventLog.WriteEntry("Service paused at " + DateTime.Now);
-            Logger.Log("Service paused at " + DateTime.Now);
+            logger.Log("Service paused at " + DateTime.Now);
         }
 
         protected override void OnContinue()
         {
             this.goDogEventLog.WriteEntry("Service continued at " + DateTime.Now);
-            Logger.Log("Service continued at " + DateTime.Now);
+            logger.Log("Service continued at " + DateTime.Now);
         }
 
         protected override void OnShutdown()
         {
             this.goDogProcess.StopConversion(true);
-            Logger.Log("System shutdown at " + DateTime.Now);
+            logger.Log("System shutdown at " + DateTime.Now);
             this.goDogEventLog.WriteEntry("System shutdown at " + DateTime.Now);
         }
 
@@ -62,7 +65,7 @@ namespace GoDogService
         {
             this.mqttSubscriber.DisconnectClient();
             this.goDogProcess.StopConversion(true);
-            Logger.Log("Service stoppped at " + DateTime.Now);
+            logger.Log("Service stoppped at " + DateTime.Now);
             this.goDogEventLog.WriteEntry("Service stoppped at " + DateTime.Now);
         }
     }

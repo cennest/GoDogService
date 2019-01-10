@@ -16,10 +16,13 @@ namespace GoDogMqttClient
         protected const string MQTT_CLIENTID = "godog-mqtt";
         protected const string MQTT_TOPIC = "godog/service";
 
+        protected Logger logger;
         protected IManagedMqttClient managedClient;
 
         public ManagedSubscriber()
         {
+            logger = new Logger().GetLogger();
+
             var options = new ManagedMqttClientOptionsBuilder()
                 .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
                     .WithClientOptions(new MqttClientOptionsBuilder()
@@ -35,7 +38,7 @@ namespace GoDogMqttClient
 
         private async void ManagedClient_Connected(object sender, MqttClientConnectedEventArgs e)
         {
-            Logger.Log("*** Connected with MQTT server ***");
+            logger.Log("*** Connected with MQTT server ***");
 
             await managedClient.SubscribeAsync(new TopicFilterBuilder()
                 .WithTopic(MQTT_TOPIC).Build());
@@ -45,7 +48,7 @@ namespace GoDogMqttClient
 
         private void ManagedClient_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            Logger.Log($"MQTT Message: {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+            logger.Log($"MQTT Message: {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
         }
 
         public void DisconnectClient()

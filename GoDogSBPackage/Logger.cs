@@ -5,30 +5,56 @@ namespace GoDogServer
 {
     public class Logger
     {
-        //protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GoDogLogger));
+        private object locker = new object();
+        private static Logger _Logger;
 
-        public static void Log(string message)
+        public Logger()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            string filepath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + ".txt";
-            if (!File.Exists(filepath))
+        }
+
+        /// <summary>
+        /// Creates the physical log file. 
+        /// </summary>
+        private void CreateLogFile(string fileName)
+        {
+            if (!File.Exists(fileName))
             {
-                // Create a file to write to.   
-                using (StreamWriter sw = File.CreateText(filepath))
+                File.Create(fileName).Close();
+            }
+        }
+
+        /// <summary>
+        /// A helper method to create singleton instance of Logger class
+        /// </summary>
+        /// <returns></returns>
+        public Logger GetLogger()
+        {
+            if (_Logger == null)
+            {
+                lock (locker)
                 {
-                    sw.WriteLine(message);
+                    if (_Logger == null)
+                    {
+                        _Logger = new Logger();
+                    }
                 }
             }
-            else
+            return _Logger;
+        }
+
+        public void Log(string message)
+        {
+            string filepath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + "-"+ DateTime.Now.Hour + ".txt";
+            CreateLogFile(filepath);
+
+            using (StreamWriter sw = File.AppendText(filepath))
             {
-                using (StreamWriter sw = File.AppendText(filepath))
-                {
-                    sw.WriteLine(message);
-                }
+                sw.WriteLine(message);
             }
         }
     }

@@ -6,8 +6,9 @@ namespace GoDogServer
 {
     public class GoDogProcess
     {
-        protected static GoDogProcess goDogProcess;
+        private static GoDogProcess _GoDogProcess;
 
+        protected Logger logger;
         protected Process process;
         protected bool isNetworkAvailable = true;
 
@@ -18,6 +19,7 @@ namespace GoDogServer
 
         public GoDogProcess()
         {
+            logger = new Logger().GetLogger();
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
 
@@ -25,25 +27,27 @@ namespace GoDogServer
         {
             this.InputURL = inputURL;
             this.OutputURL = outputURL;
+            logger = new Logger().GetLogger();
+
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
 
         public static GoDogProcess GetGoDogProcess()
         {
-            if (goDogProcess == null)
+            if (_GoDogProcess == null)
             {
-                goDogProcess = new GoDogProcess();
+                _GoDogProcess = new GoDogProcess();
             }
-            return goDogProcess;
+            return _GoDogProcess;
         }
 
         public static GoDogProcess GetGoDogProcess(string inputURL, string outputURL)
         {
-            if (goDogProcess == null)
+            if (_GoDogProcess == null)
             {
-                goDogProcess = new GoDogProcess(inputURL, outputURL);
+                _GoDogProcess = new GoDogProcess(inputURL, outputURL);
             }
-            return goDogProcess;
+            return _GoDogProcess;
         }
 
         public void StartConversion()
@@ -66,7 +70,7 @@ namespace GoDogServer
             }
             catch (Exception e)
             {
-                Logger.Log(e.Message);
+                logger.Log(e.Message);
             }
         }
 
@@ -97,11 +101,11 @@ namespace GoDogServer
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
 
-                    Logger.Log("FFMPEG process started.");
+                    logger.Log("FFMPEG process started.");
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log($"Exception: {ex.ToString()}");
+                    logger.Log($"Exception: {ex.ToString()}");
                 }
             }
             else
@@ -112,12 +116,12 @@ namespace GoDogServer
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Logger.Log(e.Data);
+            logger.Log(e.Data);
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            Logger.Log(e.Data);
+            logger.Log(e.Data);
         }
 
         private void Process_Exited(object sender, EventArgs e)
@@ -130,15 +134,15 @@ namespace GoDogServer
             {
                 if (!IsForcedStopped)
                 {
-                    Logger.Log("Restarting FFMPEG process.");
+                    logger.Log("Restarting FFMPEG process.");
                     StartConversion();
                 }
 
-                Logger.Log("FFMPEG process exited.");
+                logger.Log("FFMPEG process exited.");
             }
             else
             {
-                Logger.Log("FFMPEG process stopped due to no internet connectivity.");
+                logger.Log("FFMPEG process stopped due to no internet connectivity.");
             }
         }
 
@@ -152,7 +156,7 @@ namespace GoDogServer
 
                 if (isNetworkAvailable && process.HasExited)
                 {
-                    Logger.Log("Restarting FFMPEG process on network availability.");
+                    logger.Log("Restarting FFMPEG process on network availability.");
                     StartConversion();
                 }
             }
