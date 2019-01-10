@@ -7,6 +7,8 @@ namespace GoDogServer
     public class Logger
     {
         const int FILE_SIZE = 10;
+        const int LINES_TO_SKIP = 100;
+
         private static Logger _Logger;
 
         public Logger()
@@ -57,7 +59,7 @@ namespace GoDogServer
             if (length > GetMaxFileSize())
             {
                 File.WriteAllLines(filename, File.ReadAllLines(filename)
-                    .Where((line, index) => index >= 2));
+                    .Where((line, index) => index >= LINES_TO_SKIP));
             }
 
             using (StreamWriter sw = File.AppendText(filename))
