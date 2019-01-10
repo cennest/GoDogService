@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoDogService", "GoDogService\GoDogService.csproj", "{C97B6A0D-EB0B-4F5D-A3E5-928D801462C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoDogSBPackage", "GoDogSBPackage\GoDogSBPackage.csproj", "{14EDB990-4100-42F5-AE3E-9870B0A0E4E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoDogServer", "GoDogSBPackage\GoDogServer.csproj", "{14EDB990-4100-42F5-AE3E-9870B0A0E4E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttClientLib", "MqttClientLib\MqttClientLib.csproj", "{39B9C8E6-535D-47A3-BF3B-BDE9713F176C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoDogMqttClient", "MqttClientLib\GoDogMqttClient.csproj", "{39B9C8E6-535D-47A3-BF3B-BDE9713F176C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

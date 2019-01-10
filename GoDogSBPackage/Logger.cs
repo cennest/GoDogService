@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 
-namespace GoDogSBPackage
+namespace GoDogServer
 {
-    public class GoDogLogger
+    public class Logger
     {
         //protected static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(GoDogLogger));
 
-        public void Log(string message)
+        public static void Log(string message)
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
             if (!Directory.Exists(path))

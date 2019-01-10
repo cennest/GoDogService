@@ -79,13 +79,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GoDogSBPackage\GoDogSBPackage.csproj">
+    <ProjectReference Include="..\GoDogSBPackage\GoDogServer.csproj">
       <Project>{14edb990-4100-42f5-ae3e-9870b0a0e4e8}</Project>
-      <Name>GoDogSBPackage</Name>
+      <Name>GoDogServer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MqttClientLib\MqttClientLib.csproj">
+    <ProjectReference Include="..\MqttClientLib\GoDogMqttClient.csproj">
       <Project>{39b9c8e6-535d-47a3-bf3b-bde9713f176c}</Project>
-      <Name>MqttClientLib</Name>
+      <Name>GoDogMqttClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

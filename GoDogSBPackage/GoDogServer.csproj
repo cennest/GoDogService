@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MQTTnet" Version="2.8.5" />
+    <Folder Include="ffmpeg\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GoDogSBPackage\GoDogSBPackage.csproj" />
+    <None Update="ffmpeg\ffmpeg.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

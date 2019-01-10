@@ -1,48 +1,55 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net.NetworkInformation;
 
-namespace GoDogSBPackage
+namespace GoDogServer
 {
-    public class GoDogSB
+    public class GoDogProcess
     {
-        protected static GoDogSB GoDog_SB;
-        private GoDogLogger logger;
-        private Process process;
+        protected static GoDogProcess goDogProcess;
+
+        protected Process process;
+        protected bool isNetworkAvailable = true;
 
         public string InputURL { get; set; }
         public string OutputURL { get; set; }
 
         public bool IsForcedStopped { get; set; }
 
-        public GoDogSB(string inputURL, string outputURL)
+        public GoDogProcess()
+        {
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+        }
+
+        public GoDogProcess(string inputURL, string outputURL)
         {
             this.InputURL = inputURL;
             this.OutputURL = outputURL;
-            logger = new GoDogLogger();
+            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
 
-        public static GoDogSB GetGoDogSB()
+        public static GoDogProcess GetGoDogProcess()
         {
-            if (GoDog_SB == null)
+            if (goDogProcess == null)
             {
-                GoDog_SB = new GoDogSB(string.Empty, string.Empty);
+                goDogProcess = new GoDogProcess();
             }
-            return GoDog_SB;
+            return goDogProcess;
         }
 
-        public static GoDogSB GetGoDogSB(string inputURL, string outputURL)
+        public static GoDogProcess GetGoDogProcess(string inputURL, string outputURL)
         {
-            if (GoDog_SB == null)
+            if (goDogProcess == null)
             {
-                GoDog_SB = new GoDogSB(inputURL, outputURL);
+                goDogProcess = new GoDogProcess(inputURL, outputURL);
             }
-            return GoDog_SB;
+            return goDogProcess;
         }
 
         public void StartConversion()
         {
             IsForcedStopped = false;
-            StartVideoConversion();
+            StartConversionProcess();
         }
 
         public void StopConversion(bool forcedStop = false)
@@ -59,16 +66,11 @@ namespace GoDogSBPackage
             }
             catch (Exception e)
             {
-                this.Log(e.Message);
+                Logger.Log(e.Message);
             }
         }
 
-        public void Log(string message)
-        {
-            logger.Log(message);
-        }
-
-        private void StartVideoConversion()
+        private void StartConversionProcess()
         {
             if (!string.IsNullOrWhiteSpace(this.InputURL) && !string.IsNullOrWhiteSpace(this.OutputURL))
             {
@@ -95,27 +97,27 @@ namespace GoDogSBPackage
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
 
-                    this.Log("Conversion process started.");
+                    Logger.Log("FFMPEG process started.");
                 }
                 catch (Exception ex)
                 {
-                    this.Log($"Exception: {ex.ToString()}");
+                    Logger.Log($"Exception: {ex.ToString()}");
                 }
             }
             else
             {
-                throw new Exception("Input/Output streams not found. PLease provoide Input/Output streams.");
+                throw new Exception("Unable to start FFMPEG process due to unavailability of Input/Output streams.");
             }
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            this.Log(e.Data);
+            Logger.Log(e.Data);
         }
 
         private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
         {
-            this.Log(e.Data);
+            Logger.Log(e.Data);
         }
 
         private void Process_Exited(object sender, EventArgs e)
@@ -124,13 +126,36 @@ namespace GoDogSBPackage
             process.CancelOutputRead();
             process.Close();
 
-            if (!IsForcedStopped)
+            if (isNetworkAvailable)
             {
-                this.Log("Restarting conversion process.");
-                StartConversion();
-            }
+                if (!IsForcedStopped)
+                {
+                    Logger.Log("Restarting FFMPEG process.");
+                    StartConversion();
+                }
 
-            this.Log("Conversion process exited.");
+                Logger.Log("FFMPEG process exited.");
+            }
+            else
+            {
+                Logger.Log("FFMPEG process stopped due to no internet connectivity.");
+            }
+        }
+
+        private void NetworkChange_NetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+        {
+            if (isNetworkAvailable != e.IsAvailable)
+            {
+                isNetworkAvailable = e.IsAvailable;
+
+                System.Threading.Tasks.Task.Delay(5000).Wait();
+
+                if (isNetworkAvailable && process.HasExited)
+                {
+                    Logger.Log("Restarting FFMPEG process on network availability.");
+                    StartConversion();
+                }
+            }
         }
     }
 }
