@@ -5,7 +5,6 @@ namespace GoDogServer
 {
     public class Logger
     {
-        private object locker = new object();
         private static Logger _Logger;
 
         public Logger()
@@ -36,13 +35,7 @@ namespace GoDogServer
         {
             if (_Logger == null)
             {
-                lock (locker)
-                {
-                    if (_Logger == null)
-                    {
-                        _Logger = new Logger();
-                    }
-                }
+                _Logger = new Logger();
             }
             return _Logger;
         }

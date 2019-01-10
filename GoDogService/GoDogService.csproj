@@ -36,6 +36,9 @@
     <Reference Include="MQTTnet, Version=2.8.5.0, Culture=neutral, PublicKeyToken=b69712f52770c0a7, processorArchitecture=MSIL">
       <HintPath>..\packages\MQTTnet.2.8.5\lib\net461\MQTTnet.dll</HintPath>
     </Reference>
+    <Reference Include="MQTTnet.Extensions.ManagedClient, Version=2.8.5.0, Culture=neutral, PublicKeyToken=b69712f52770c0a7, processorArchitecture=MSIL">
+      <HintPath>..\packages\MQTTnet.Extensions.ManagedClient.2.8.5\lib\net461\MQTTnet.Extensions.ManagedClient.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
@@ -79,13 +82,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GoDogSBPackage\GoDogServer.csproj">
-      <Project>{14edb990-4100-42f5-ae3e-9870b0a0e4e8}</Project>
-      <Name>GoDogServer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MqttClientLib\GoDogMqttClient.csproj">
-      <Project>{39b9c8e6-535d-47a3-bf3b-bde9713f176c}</Project>
+    <ProjectReference Include="..\GoDogMqttClient\GoDogMqttClient.csproj">
+      <Project>{547c3aef-1b13-405b-85e2-22b6343b15c0}</Project>
       <Name>GoDogMqttClient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GoDogServer\GoDogServer.csproj">
+      <Project>{ae20777d-0b35-4363-aa4c-0ee198c06baf}</Project>
+      <Name>GoDogServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
