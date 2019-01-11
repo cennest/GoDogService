@@ -14,15 +14,12 @@ namespace GoDogService
         public GoDogProcess goDogProcess;
         public ManagedSubscriber mqttSubscriber;
 
-        string inputFile = @"rtsp://root:password@192.168.1.43/axis-media/media.amp"; //rtsp://admin:Foxhound1!@192.168.1.64/Streaming/Channels/1
-        string outputFile = @"rtmp://104.248.182.51/live/1"; //rtmp://104.248.182.51/live/2
-
         public GoDogService()
         {
             InitializeComponent();
 
             logger = new Logger().GetLogger();
-            this.goDogProcess = GoDogProcess.GetGoDogProcess(inputFile, outputFile);
+            this.goDogProcess = GoDogProcess.GetGoDogProcess(Configuration.InputStreamURL, Configuration.OutputStreamURL);
             this.goDogEventLog = new EventLog();
             this.mqttSubscriber = new ManagedSubscriber();
 
@@ -39,6 +36,10 @@ namespace GoDogService
         {
             this.goDogEventLog.WriteEntry("Service started at " + DateTime.Now);
             logger.Log("Service started at " + DateTime.Now);
+
+            this.goDogProcess.InputURL = Configuration.InputStreamURL;
+            this.goDogProcess.OutputURL = Configuration.OutputStreamURL;
+
             this.goDogProcess.StartConversion();
         }
 
