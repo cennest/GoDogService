@@ -48,7 +48,7 @@ namespace GoDogMqttClient
 
         private void ManagedClient_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            logger.Log($"MQTT Message: {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+            logger.Log($"MQTT message: {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
         }
 
         public void DisconnectClient()

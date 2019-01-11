@@ -51,20 +51,27 @@ namespace GoDogServer
 
         public void Log(string message)
         {
-            string filename = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + ".txt";
-
-            CreateLogFile(filename);
-
-            long length = new FileInfo(filename).Length;
-            if (length > GetMaxFileSize())
+            try
             {
-                File.WriteAllLines(filename, File.ReadAllLines(filename)
-                    .Where((line, index) => index >= LINES_TO_SKIP));
+                string filename = AppDomain.CurrentDomain.BaseDirectory + "\\Logs\\GoDog_" + DateTime.Now.Date.ToShortDateString().Replace('/', '_') + ".txt";
+
+                CreateLogFile(filename);
+
+                long length = new FileInfo(filename).Length;
+                if (length > GetMaxFileSize())
+                {
+                    File.WriteAllLines(filename, File.ReadAllLines(filename)
+                        .Where((line, index) => index >= LINES_TO_SKIP));
+                }
+
+                using (StreamWriter sw = File.AppendText(filename))
+                {
+                    sw.WriteLine(message);
+                }
             }
-
-            using (StreamWriter sw = File.AppendText(filename))
+            catch (Exception ex)
             {
-                sw.WriteLine(message);
+
             }
         }
     }

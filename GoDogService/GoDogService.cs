@@ -14,8 +14,8 @@ namespace GoDogService
         public GoDogProcess goDogProcess;
         public ManagedSubscriber mqttSubscriber;
 
-        string inputFile = @"rtsp://admin:Foxhound1!@192.168.1.64/Streaming/Channels/1";
-        string outputFile = @"rtmp://104.248.182.51/live/2";
+        string inputFile = @"rtsp://root:password@192.168.1.43/axis-media/media.amp"; //rtsp://admin:Foxhound1!@192.168.1.64/Streaming/Channels/1
+        string outputFile = @"rtmp://104.248.182.51/live/1"; //rtmp://104.248.182.51/live/2
 
         public GoDogService()
         {
