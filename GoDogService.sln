@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoDogServer", "GoDogServer\
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "GoDogServiceSetup", "GoDogServiceSetup\GoDogServiceSetup.vdproj", "{53A0D591-3A21-4FA5-94F9-CE70A709289D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp2", "ConsoleApp2\ConsoleApp2.csproj", "{24C016F6-782D-445A-A5A6-98867250D5CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{AE20777D-0B35-4363-AA4C-0EE198C06BAF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{53A0D591-3A21-4FA5-94F9-CE70A709289D}.Debug|Any CPU.ActiveCfg = Debug
 		{53A0D591-3A21-4FA5-94F9-CE70A709289D}.Release|Any CPU.ActiveCfg = Release
+		{24C016F6-782D-445A-A5A6-98867250D5CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24C016F6-782D-445A-A5A6-98867250D5CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24C016F6-782D-445A-A5A6-98867250D5CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24C016F6-782D-445A-A5A6-98867250D5CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
