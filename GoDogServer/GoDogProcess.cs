@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GoDogServer
 {
@@ -17,11 +19,11 @@ namespace GoDogServer
 
         public bool IsForcedStopped { get; set; }
 
-        public GoDogProcess()
-        {
-            logger = new Logger().GetLogger();
-            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-        }
+        //public GoDogProcess()
+        //{
+        //    logger = new Logger().GetLogger();
+        //    NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
+        //}
 
         public GoDogProcess(string inputURL, string outputURL)
         {
@@ -32,23 +34,23 @@ namespace GoDogServer
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
 
-        public static GoDogProcess GetGoDogProcess()
-        {
-            if (_GoDogProcess == null)
-            {
-                _GoDogProcess = new GoDogProcess();
-            }
-            return _GoDogProcess;
-        }
+        //public static GoDogProcess GetGoDogProcess()
+        //{
+        //    if (_GoDogProcess == null)
+        //    {
+        //        _GoDogProcess = new GoDogProcess();
+        //    }
+        //    return _GoDogProcess;
+        //}
 
-        public static GoDogProcess GetGoDogProcess(string inputURL, string outputURL)
-        {
-            if (_GoDogProcess == null)
-            {
-                _GoDogProcess = new GoDogProcess(inputURL, outputURL);
-            }
-            return _GoDogProcess;
-        }
+        //public static GoDogProcess GetGoDogProcess(string inputURL, string outputURL)
+        //{
+        //    if (_GoDogProcess == null)
+        //    {
+        //        _GoDogProcess = new GoDogProcess(inputURL, outputURL);
+        //    }
+        //    return _GoDogProcess;
+        //}
 
         public void StartConversion()
         {
