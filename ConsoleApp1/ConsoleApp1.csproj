@@ -2,12 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GoDogMqttClient\GoDogMqttClient.csproj" />
     <ProjectReference Include="..\GoDogServer\GoDogServer.csproj" />
+    <ProjectReference Include="..\GoDogService\GoDogService.csproj" />
   </ItemGroup>
 
 </Project>
