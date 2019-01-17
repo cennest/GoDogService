@@ -14,7 +14,7 @@ namespace GoDogServer
         public GoDogManager()
         {
             _cameraMagers = new Dictionary<long, CameraManager>();
-            logger = new Logger().GetLogger();
+            logger = Logger.GetLogger();
         }
 
         public static GoDogManager GetGoDogManager()

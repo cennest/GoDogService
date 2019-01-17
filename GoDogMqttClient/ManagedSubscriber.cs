@@ -19,9 +19,9 @@ namespace GoDogMqttClient
 
         public ManagedSubscriber()
         {
-            logger = new Logger().GetLogger();
+            this.logger = Logger.GetLogger();
 
-            var options = new ManagedMqttClientOptionsBuilder()
+            ManagedMqttClientOptions options = new ManagedMqttClientOptionsBuilder()
                 .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
                     .WithClientOptions(new MqttClientOptionsBuilder()
                     .WithClientId(MQTT_CLIENTID)
@@ -29,29 +29,29 @@ namespace GoDogMqttClient
                     .Build())
                 .Build();
 
-            managedClient = new MqttFactory().CreateManagedMqttClient();
-            managedClient.StartAsync(options);
-            managedClient.Connected += ManagedClient_Connected;
+            this.managedClient = new MqttFactory().CreateManagedMqttClient();
+            this.managedClient.StartAsync(options);
+            this.managedClient.Connected += ManagedClient_Connected;
         }
 
         private async void ManagedClient_Connected(object sender, MqttClientConnectedEventArgs e)
         {
-            logger.Log("*** Connected with MQTT server ***");
+            this.logger.Log("*** Connected with MQTT server ***");
 
-            await managedClient.SubscribeAsync(new TopicFilterBuilder()
+            await this.managedClient.SubscribeAsync(new TopicFilterBuilder()
                 .WithTopic(MQTT_TOPIC).Build());
 
-            managedClient.ApplicationMessageReceived += ManagedClient_ApplicationMessageReceived;
+            this.managedClient.ApplicationMessageReceived += ManagedClient_ApplicationMessageReceived;
         }
 
         private void ManagedClient_ApplicationMessageReceived(object sender, MqttApplicationMessageReceivedEventArgs e)
         {
-            logger.Log($"MQTT message: {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+            this.logger.Log($"MQTT message: {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
         }
 
         public void DisconnectClient()
         {
-            managedClient.StopAsync().Wait();
+            this.managedClient.StopAsync().Wait();
         }
     }
 }

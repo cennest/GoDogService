@@ -40,7 +40,7 @@ namespace GoDogCommon
         /// A helper method to create singleton instance of Logger class
         /// </summary>
         /// <returns></returns>
-        public Logger GetLogger()
+        public static Logger GetLogger()
         {
             if (_Logger == null)
             {
@@ -69,7 +69,7 @@ namespace GoDogCommon
                     sw.WriteLine(message);
                 }
             }
-            catch (Exception ex)
+            catch
             {
 
             }

@@ -17,7 +17,7 @@ namespace GoDogServer
 
         public CameraManager()
         {
-            logger = new Logger().GetLogger();
+            logger = Logger.GetLogger();
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
 
