@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Text;
-using System.Threading.Tasks;
-
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
 
-using GoDogServer;
+using GoDogCommon;
 
 namespace GoDogMqttClient
 {

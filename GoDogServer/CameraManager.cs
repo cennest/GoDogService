@@ -1,53 +1,24 @@
-﻿using System;
+﻿using GoDogCommon;
+using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 
 namespace GoDogServer
 {
-    public class GoDogProcess
+    class CameraManager
     {
-        private static GoDogProcess _GoDogProcess;
-
         protected Logger logger;
         protected Process process;
         protected bool isNetworkAvailable = true;
 
         public string InputURL { get; set; }
         public string OutputURL { get; set; }
-
         public bool IsForcedStopped { get; set; }
 
-        public GoDogProcess()
+        public CameraManager()
         {
             logger = new Logger().GetLogger();
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-        }
-
-        public GoDogProcess(string inputURL, string outputURL)
-        {
-            this.InputURL = inputURL;
-            this.OutputURL = outputURL;
-            logger = new Logger().GetLogger();
-
-            NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
-        }
-
-        public static GoDogProcess GetGoDogProcess()
-        {
-            if (_GoDogProcess == null)
-            {
-                _GoDogProcess = new GoDogProcess();
-            }
-            return _GoDogProcess;
-        }
-
-        public static GoDogProcess GetGoDogProcess(string inputURL, string outputURL)
-        {
-            if (_GoDogProcess == null)
-            {
-                _GoDogProcess = new GoDogProcess(inputURL, outputURL);
-            }
-            return _GoDogProcess;
         }
 
         public void StartConversion()

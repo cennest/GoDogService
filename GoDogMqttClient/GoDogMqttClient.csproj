@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GoDogCommon\GoDogCommon.csproj" />
     <ProjectReference Include="..\GoDogServer\GoDogServer.csproj" />
   </ItemGroup>
 
