@@ -1,4 +1,5 @@
 ﻿using GoDogCommon;
+using GoDogServer.Models;
 using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
@@ -10,14 +11,16 @@ namespace GoDogServer
         protected Logger logger;
         protected Process process;
         protected bool isNetworkAvailable = true;
+        private Camera Camera;
 
         public string InputURL { get; set; }
         public string OutputURL { get; set; }
         public bool IsForcedStopped { get; set; }
 
-        public CameraManager()
+        public CameraManager(Camera camera)
         {
-            logger = Logger.GetLogger();
+            this.Camera = camera;
+            this.logger = Logger.GetLogger();
             NetworkChange.NetworkAvailabilityChanged += NetworkChange_NetworkAvailabilityChanged;
         }
 

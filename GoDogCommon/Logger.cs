@@ -4,19 +4,36 @@ using System.Linq;
 
 namespace GoDogCommon
 {
-    public class Logger
+    public sealed class Logger
     {
         const int FILE_SIZE = 10;
         const int LINES_TO_SKIP = 1000;
 
-        private static Logger _Logger;
+        private static Logger logger;
+        private static readonly object locker = new object();
 
-        public Logger()
+        Logger()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
+            }
+        }
+
+        /// <summary>
+        /// A helper method to create singleton instance of Logger class
+        /// </summary>
+        /// <returns></returns>
+        public static Logger GetLogger()
+        {
+            lock (locker)
+            {
+                if (logger == null)
+                {
+                    logger = new Logger();
+                }
+                return logger;
             }
         }
 
@@ -34,19 +51,6 @@ namespace GoDogCommon
         private long GetMaxFileSize()
         {
             return FILE_SIZE * 1024 * 1024;
-        }
-
-        /// <summary>
-        /// A helper method to create singleton instance of Logger class
-        /// </summary>
-        /// <returns></returns>
-        public static Logger GetLogger()
-        {
-            if (_Logger == null)
-            {
-                _Logger = new Logger();
-            }
-            return _Logger;
         }
 
         public void Log(string message)
