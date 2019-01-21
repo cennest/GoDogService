@@ -12,6 +12,7 @@ namespace GoDogServer.Models
         public string IPAddress { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public string CameraURL { get; set; }
         public string StreamingURL { get; set; }
         public long ArchivalPeriod { get; set; }
     }

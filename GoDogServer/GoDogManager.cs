@@ -10,17 +10,18 @@ namespace GoDogServer
     public sealed class GoDogManager
     {
         private Logger logger;
-        private Facility facility;
+        private Field field;
         private static GoDogManager goDogManager;
         private Dictionary<long, CameraManager> cameraManagers;
 
         private static readonly object locker = new object();
 
-        GoDogManager()
+        public GoDogManager()
         {
+            //string biosId = GoDogCommon.Configuration.BiosID();
             cameraManagers = new Dictionary<long, CameraManager>();
             logger = Logger.GetLogger();
-            facility = DataHelper.GetDataHelper().GetFacility();
+            field = DataHelper.GetDataHelper().GetField();
             InitCameraManager();
         }
 
@@ -42,45 +43,44 @@ namespace GoDogServer
 
         private void InitCameraManager()
         {
-            if(facility != null)
+            if (field != null)
             {
-                foreach (Field field in facility.Fields)
+                foreach (Camera camera in field.NUC.Cameras)
                 {
-                    if (field.NUC != null)
-                    {
-                        foreach (Camera camera in field.NUC.Cameras)
-                        {
-                            cameraManagers[camera.ID] = new CameraManager(camera);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void StopAllCameras()
-        {
-            foreach(var manager in cameraManagers)
-            {
-                try
-                {
-                    CameraManager cameraManager = (CameraManager)manager.Value;
-                    cameraManager.StopConversion(true);
-                }
-                catch(Exception)
-                {
-
+                    this.logger.Log($"Init Camera {camera.ID}");
+                    cameraManagers[camera.ID] = new CameraManager(camera);
                 }
             }
         }
 
         public void StartAllCameras()
         {
+            this.logger.Log($"Starting FFMPEG process.");
             foreach (var manager in cameraManagers)
             {
                 try
                 {
                     CameraManager cameraManager = (CameraManager)manager.Value;
                     cameraManager.StartConversion();
+                    this.logger.Log($"Started Camera {manager.Key} FFMPEG process.");
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+        }
+
+        public void StopAllCameras()
+        {
+            this.logger.Log($"Stopping FFMPEG process.");
+            foreach (var manager in cameraManagers)
+            {
+                try
+                {
+                    CameraManager cameraManager = (CameraManager)manager.Value;
+                    cameraManager.StopConversion(true);
+                    this.logger.Log($"Stopped Camera {manager.Key} FFMPEG process");
                 }
                 catch (Exception)
                 {
@@ -91,6 +91,7 @@ namespace GoDogServer
 
         public void StartCamera(long cameraID)
         {
+            this.logger.Log($"Starting Camera {cameraID} FFMPEG process.");
             CameraManager cameraManager = cameraManagers[cameraID];
             if (cameraManager != null)
             {
@@ -100,6 +101,7 @@ namespace GoDogServer
 
         public void StopCamera(long cameraID)
         {
+            this.logger.Log($"Stopping Camera {cameraID} FFMPEG process.");
             CameraManager cameraManager = cameraManagers[cameraID];
             if (cameraManager != null)
             {

@@ -13,8 +13,6 @@ namespace GoDogServer
         protected bool isNetworkAvailable = true;
         private Camera Camera;
 
-        public string InputURL { get; set; }
-        public string OutputURL { get; set; }
         public bool IsForcedStopped { get; set; }
 
         public CameraManager(Camera camera)
@@ -50,9 +48,11 @@ namespace GoDogServer
 
         private void StartConversionProcess()
         {
-            if (!string.IsNullOrWhiteSpace(this.InputURL) && !string.IsNullOrWhiteSpace(this.OutputURL))
+            //string cameraURL = string.Format("rtsp://{0}:{1}@{2}/axis-media/media.amp", this.Camera.Username, this.Camera.Password, this.Camera.IPAddress);
+            string cameraURL = this.Camera.CameraURL;
+            if (!string.IsNullOrWhiteSpace(cameraURL) && !string.IsNullOrWhiteSpace(this.Camera.StreamingURL))
             {
-                string filArgs = string.Format("-stimeout 5000 -rtsp_transport tcp -re -i \"{0}\" -c:v copy -c:a aac -b:a 128k -ar 44100 -f flv \"{1}\"", this.InputURL, this.OutputURL);
+                string filArgs = string.Format("-stimeout 5000 -rtsp_transport tcp -re -i \"{0}\" -c:v copy -c:a aac -b:a 128k -ar 44100 -f flv \"{1}\"", cameraURL, this.Camera.StreamingURL);
                 try
                 {
                     process = new Process();
@@ -75,7 +75,7 @@ namespace GoDogServer
                     process.BeginOutputReadLine();
                     process.BeginErrorReadLine();
 
-                    logger.Log("FFMPEG process started.");
+                    logger.Log($"Camera {this.Camera.ID} FFMPEG process started.");
                 }
                 catch (Exception ex)
                 {
@@ -84,7 +84,7 @@ namespace GoDogServer
             }
             else
             {
-                throw new Exception("Unable to start FFMPEG process due to unavailability of Input/Output streams.");
+                throw new Exception($"Unable to start FFMPEG process of Camera {this.Camera.ID} due to unavailability of Input/Output streams.");
             }
         }
 
@@ -108,15 +108,15 @@ namespace GoDogServer
             {
                 if (!IsForcedStopped)
                 {
-                    logger.Log("Restarting FFMPEG process.");
+                    logger.Log($"Camera {this.Camera.ID} Restarting FFMPEG process.");
                     StartConversion();
                 }
 
-                logger.Log("FFMPEG process exited.");
+                logger.Log($"Camera {this.Camera.ID} FFMPEG process exited.");
             }
             else
             {
-                logger.Log("FFMPEG process stopped due to no internet connectivity.");
+                logger.Log($"Camera {this.Camera.ID} FFMPEG process stopped due to no internet connectivity.");
             }
         }
 
@@ -130,7 +130,7 @@ namespace GoDogServer
 
                 if (isNetworkAvailable && process.HasExited)
                 {
-                    logger.Log("Restarting FFMPEG process on network availability.");
+                    logger.Log($"Restarting Camera {this.Camera.ID} FFMPEG process on network availability.");
                     StartConversion();
                 }
             }

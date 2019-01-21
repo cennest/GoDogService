@@ -11,7 +11,7 @@ namespace GoDogServer.Models
             Cameras = new List<Camera>();
         }
 
-        public long ID { get; set; }
+        public string ID { get; set; }
         public string Name { get; set; }
         public string ServerURL { get; set; }
 

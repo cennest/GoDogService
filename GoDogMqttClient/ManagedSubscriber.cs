@@ -36,10 +36,10 @@ namespace GoDogMqttClient
 
         private async void ManagedClient_Connected(object sender, MqttClientConnectedEventArgs e)
         {
-            this.logger.Log("*** Connected with MQTT server ***");
+            this.logger.Log("*** Connected to MQTT server ***");
 
-            await this.managedClient.SubscribeAsync(new TopicFilterBuilder()
-                .WithTopic(MQTT_TOPIC).Build());
+            await this.managedClient.SubscribeAsync(
+                new TopicFilterBuilder().WithTopic(MQTT_TOPIC).Build());
 
             this.managedClient.ApplicationMessageReceived += ManagedClient_ApplicationMessageReceived;
         }

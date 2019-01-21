@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json.Linq;
 
 namespace GoDogCommon
 {
-    class Configuration
+    public class Configuration
     {
         private Logger logger;
         private string ConfigFile = AppDomain.CurrentDomain.BaseDirectory + "\\configuration.json";
@@ -61,7 +60,7 @@ namespace GoDogCommon
             return result;
         }
 
-        public static string BoiseID()
+        public static string BiosID()
         {
             return Identifier("Win32_BIOS", "SerialNumber");
         }

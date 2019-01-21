@@ -12,7 +12,7 @@ namespace GoDogCommon
         private static Logger logger;
         private static readonly object locker = new object();
 
-        Logger()
+        public Logger()
         {
             string path = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
             if (!Directory.Exists(path))

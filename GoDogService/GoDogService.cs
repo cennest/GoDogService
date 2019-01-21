@@ -31,6 +31,7 @@ namespace GoDogService
 
         protected override void OnStart(string[] args)
         {
+            this.goDogManager.StartAllCameras();
             this.goDogEventLog.WriteEntry("Service started at " + DateTime.Now);
         }
 
@@ -46,7 +47,7 @@ namespace GoDogService
 
         protected override void OnStop()
         {
-            //this.goDogManager.StopConversion(true);
+            this.goDogManager.StopAllCameras();
             this.mqttSubscriber.DisconnectClient();
             this.goDogEventLog.WriteEntry("Service stoppped at " + DateTime.Now);
         }
