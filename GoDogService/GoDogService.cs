@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.ServiceProcess;
 
-using GoDogServer;
+using GoDogNUCServer;
 using GoDogMqttClient;
 
 namespace GoDogService

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 using GoDogCommon;
-using GoDogServer.Helpers;
-using GoDogServer.Models;
+using GoDogNUCServer.Helpers;
+using GoDogNUCServer.Models;
 
-namespace GoDogServer
+namespace GoDogNUCServer
 {
     public sealed class GoDogManager
     {

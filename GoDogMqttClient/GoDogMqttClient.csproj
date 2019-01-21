@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GoDogCommon\GoDogCommon.csproj" />
-    <ProjectReference Include="..\GoDogServer\GoDogServer.csproj" />
+    <ProjectReference Include="..\GoDogNUCServer\GoDogNUCServer.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GoDogServer.Helpers
+namespace GoDogNUCServer.Helpers
 {
     class CameraAPI
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 //using StackExchange.Redis;
 
 using GoDogCommon;
-using GoDogServer.Models;
+using GoDogNUCServer.Models;
 
-namespace GoDogServer.Helpers
+namespace GoDogNUCServer.Helpers
 {
     public sealed class DataHelper
     {

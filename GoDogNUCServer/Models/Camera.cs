@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GoDogServer.Models
+namespace GoDogNUCServer.Models
 {
     public class Camera
     {

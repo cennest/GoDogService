@@ -86,9 +86,9 @@
       <Project>{547c3aef-1b13-405b-85e2-22b6343b15c0}</Project>
       <Name>GoDogMqttClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GoDogServer\GoDogServer.csproj">
-      <Project>{ae20777d-0b35-4363-aa4c-0ee198c06baf}</Project>
-      <Name>GoDogServer</Name>
+    <ProjectReference Include="..\GoDogNUCServer\GoDogNUCServer.csproj">
+      <Project>{68d44526-d063-483e-96c5-fcb390f696aa}</Project>
+      <Name>GoDogNUCServer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

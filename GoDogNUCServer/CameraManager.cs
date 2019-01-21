@@ -1,10 +1,10 @@
 ﻿using GoDogCommon;
-using GoDogServer.Models;
+using GoDogNUCServer.Models;
 using System;
 using System.Diagnostics;
 using System.Net.NetworkInformation;
 
-namespace GoDogServer
+namespace GoDogNUCServer
 {
     class CameraManager
     {
